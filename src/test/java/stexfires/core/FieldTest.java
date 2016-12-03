@@ -1,20 +1,20 @@
 package stexfires.core;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class FieldTest {
+class FieldTest {
 
-    private Field fieldNullValue;
-    private Field fieldEmptyValue;
-    private Field fieldValueFirst;
-    private Field fieldValueFirstLast;
-    private Field fieldValueLast;
+    private static Field fieldNullValue;
+    private static Field fieldEmptyValue;
+    private static Field fieldValueFirst;
+    private static Field fieldValueFirstLast;
+    private static Field fieldValueLast;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeAll
+    static void setUp() {
         fieldNullValue = new Field(0, true, null);
         fieldEmptyValue = new Field(0, true, "");
         fieldValueFirst = new Field(0, false, "test");
@@ -23,7 +23,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testGetIndex() throws Exception {
+    void getIndex() {
         assertEquals(0, fieldNullValue.getIndex());
         assertEquals(0, fieldEmptyValue.getIndex());
         assertEquals(0, fieldValueFirst.getIndex());
@@ -32,7 +32,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testIsFirst() throws Exception {
+    void isFirst() {
         assertTrue(fieldNullValue.isFirst());
         assertTrue(fieldEmptyValue.isFirst());
         assertTrue(fieldValueFirst.isFirst());
@@ -41,7 +41,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testIsLast() throws Exception {
+    void isLast() {
         assertTrue(fieldNullValue.isLast());
         assertTrue(fieldEmptyValue.isLast());
         assertFalse(fieldValueFirst.isLast());
@@ -50,7 +50,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testGetValue() throws Exception {
+    void getValue() {
         assertNull(fieldNullValue.getValue());
         assertEquals("", fieldEmptyValue.getValue());
         assertEquals("test", fieldValueFirst.getValue());
@@ -59,7 +59,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testGetValueOrElse() throws Exception {
+    void getValueOrElse() {
         assertEquals("else", fieldNullValue.getValueOrElse("else"));
         assertEquals("", fieldEmptyValue.getValueOrElse("else"));
         assertEquals("test", fieldValueFirst.getValueOrElse("else"));
@@ -68,7 +68,28 @@ public class FieldTest {
     }
 
     @Test
-    public void testValueEquals() throws Exception {
+    void getValueAsOptional() {
+        assertNotNull(fieldNullValue.getValueAsOptional());
+        assertNotNull(fieldEmptyValue.getValueAsOptional());
+        assertNotNull(fieldValueFirst.getValueAsOptional());
+        assertNotNull(fieldValueFirstLast.getValueAsOptional());
+        assertNotNull(fieldValueLast.getValueAsOptional());
+
+        assertFalse(fieldNullValue.getValueAsOptional().isPresent());
+        assertTrue(fieldEmptyValue.getValueAsOptional().isPresent());
+        assertTrue(fieldValueFirst.getValueAsOptional().isPresent());
+        assertTrue(fieldValueFirstLast.getValueAsOptional().isPresent());
+        assertTrue(fieldValueLast.getValueAsOptional().isPresent());
+
+        assertEquals("ELSE", fieldNullValue.getValueAsOptional().orElse("ELSE"));
+        assertEquals("", fieldEmptyValue.getValueAsOptional().orElse("ELSE"));
+        assertEquals("test", fieldValueFirst.getValueAsOptional().orElse("ELSE"));
+        assertEquals("test", fieldValueFirstLast.getValueAsOptional().orElse("ELSE"));
+        assertEquals("test", fieldValueLast.getValueAsOptional().orElse("ELSE"));
+    }
+
+    @Test
+    void valueEquals() {
         assertTrue(fieldNullValue.valueEquals(null));
         assertFalse(fieldEmptyValue.valueEquals(null));
         assertFalse(fieldValueFirst.valueEquals(null));
@@ -89,7 +110,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testValueIsNull() throws Exception {
+    void valueIsNull() {
         assertTrue(fieldNullValue.valueIsNull());
         assertFalse(fieldEmptyValue.valueIsNull());
         assertFalse(fieldValueFirst.valueIsNull());
@@ -98,7 +119,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testValueIsEmpty() throws Exception {
+    void valueIsEmpty() {
         assertFalse(fieldNullValue.valueIsEmpty());
         assertTrue(fieldEmptyValue.valueIsEmpty());
         assertFalse(fieldValueFirst.valueIsEmpty());
@@ -107,7 +128,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testValueIsNullOrEmpty() throws Exception {
+    void valueIsNullOrEmpty() {
         assertTrue(fieldNullValue.valueIsNullOrEmpty());
         assertTrue(fieldEmptyValue.valueIsNullOrEmpty());
         assertFalse(fieldValueFirst.valueIsNullOrEmpty());
@@ -116,7 +137,7 @@ public class FieldTest {
     }
 
     @Test
-    public void testLength() throws Exception {
+    void length() {
         assertEquals(0, fieldNullValue.length());
         assertEquals(0, fieldEmptyValue.length());
         assertEquals(4, fieldValueFirst.length());
@@ -125,7 +146,28 @@ public class FieldTest {
     }
 
     @Test
-    public void testEquals() throws Exception {
+    void stream() {
+        assertNotNull(fieldNullValue.stream());
+        assertNotNull(fieldEmptyValue.stream());
+        assertNotNull(fieldValueFirst.stream());
+        assertNotNull(fieldValueFirstLast.stream());
+        assertNotNull(fieldValueLast.stream());
+
+        assertEquals(0, fieldNullValue.stream().count());
+        assertEquals(1, fieldEmptyValue.stream().count());
+        assertEquals(1, fieldValueFirst.stream().count());
+        assertEquals(1, fieldValueFirstLast.stream().count());
+        assertEquals(1, fieldValueLast.stream().count());
+
+        assertEquals("ELSE", fieldNullValue.stream().findFirst().orElse("ELSE"));
+        assertEquals("", fieldEmptyValue.stream().findFirst().orElse("ELSE"));
+        assertEquals("test", fieldValueFirst.stream().findFirst().orElse("ELSE"));
+        assertEquals("test", fieldValueFirstLast.stream().findFirst().orElse("ELSE"));
+        assertEquals("test", fieldValueLast.stream().findFirst().orElse("ELSE"));
+    }
+
+    @Test
+    void testEquals() {
         assertTrue(fieldNullValue.equals(fieldNullValue));
         assertFalse(fieldNullValue.equals(fieldEmptyValue));
         assertFalse(fieldNullValue.equals(fieldValueFirst));
@@ -200,7 +242,13 @@ public class FieldTest {
     }
 
     @Test
-    public void testHashCode() throws Exception {
+    void testHashCode() {
+        assertEquals(fieldNullValue.hashCode(), fieldNullValue.hashCode());
+        assertEquals(fieldEmptyValue.hashCode(), fieldEmptyValue.hashCode());
+        assertEquals(fieldValueFirst.hashCode(), fieldValueFirst.hashCode());
+        assertEquals(fieldValueFirstLast.hashCode(), fieldValueFirstLast.hashCode());
+        assertEquals(fieldValueLast.hashCode(), fieldValueLast.hashCode());
+
         assertNotEquals(fieldNullValue.hashCode(), fieldEmptyValue.hashCode());
         assertNotEquals(fieldNullValue.hashCode(), fieldValueFirst.hashCode());
         assertNotEquals(fieldNullValue.hashCode(), fieldValueFirstLast.hashCode());
@@ -214,10 +262,14 @@ public class FieldTest {
         assertNotEquals(fieldValueFirst.hashCode(), fieldValueLast.hashCode());
 
         assertNotEquals(fieldValueFirstLast.hashCode(), fieldValueLast.hashCode());
+
+        assertEquals(
+                new Field(3, false, "TEST").hashCode(),
+                new Field(3, false, "TEST").hashCode());
     }
 
     @Test
-    public void testToString() throws Exception {
+    void testToString() {
         assertEquals("Field{0, true, null}", fieldNullValue.toString());
         assertEquals("Field{0, true, ''}", fieldEmptyValue.toString());
         assertEquals("Field{0, false, 'test'}", fieldValueFirst.toString());
