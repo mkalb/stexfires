@@ -38,8 +38,35 @@ class EmptyRecordTest {
     }
 
     @Test
+    void getCategoryOrElse() {
+        assertEquals("ELSE", record.getCategoryOrElse("ELSE"));
+    }
+
+    @Test
+    void getCategoryAsOptional() {
+        assertEquals("ELSE", record.getCategoryAsOptional().orElse("ELSE"));
+    }
+
+    @Test
+    void streamOfCategory() {
+        assertNotNull(record.streamOfCategory());
+        assertEquals(0, record.streamOfCategory().count());
+    }
+
+    @Test
     void getRecordId() {
         assertNull(record.getRecordId());
+    }
+
+    @Test
+    void getRecordIdAsOptional() {
+        assertEquals(Long.valueOf(Long.MAX_VALUE), record.getRecordIdAsOptional().orElse(Long.valueOf(Long.MAX_VALUE)));
+    }
+
+    @Test
+    void streamOfRecordId() {
+        assertNotNull(record.streamOfRecordId());
+        assertEquals(0, record.streamOfRecordId().count());
     }
 
     @Test

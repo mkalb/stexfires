@@ -132,6 +132,50 @@ class SingleRecordTest {
     }
 
     @Test
+    void getCategoryOrElse() {
+        assertEquals("ELSE", recordNull.getCategoryOrElse("ELSE"));
+        assertEquals("ELSE", recordEmpty.getCategoryOrElse("ELSE"));
+        assertEquals("ELSE", recordTest.getCategoryOrElse("ELSE"));
+        assertEquals("category", recordCategory.getCategoryOrElse("ELSE"));
+        assertEquals("ELSE", recordRecordId.getCategoryOrElse("ELSE"));
+        assertEquals("category", record.getCategoryOrElse("ELSE"));
+    }
+
+    @Test
+    void getCategoryAsOptional() {
+        assertEquals("ELSE", recordNull.getCategoryAsOptional().orElse("ELSE"));
+        assertEquals("ELSE", recordEmpty.getCategoryAsOptional().orElse("ELSE"));
+        assertEquals("ELSE", recordTest.getCategoryAsOptional().orElse("ELSE"));
+        assertEquals("category", recordCategory.getCategoryAsOptional().orElse("ELSE"));
+        assertEquals("ELSE", recordRecordId.getCategoryAsOptional().orElse("ELSE"));
+        assertEquals("category", record.getCategoryAsOptional().orElse("ELSE"));
+    }
+
+    @Test
+    void streamOfCategory() {
+        assertNotNull(recordNull.streamOfCategory());
+        assertNotNull(recordEmpty.streamOfCategory());
+        assertNotNull(recordTest.streamOfCategory());
+        assertNotNull(recordCategory.streamOfCategory());
+        assertNotNull(recordRecordId.streamOfCategory());
+        assertNotNull(record.streamOfCategory());
+
+        assertEquals(0, recordNull.streamOfCategory().count());
+        assertEquals(0, recordEmpty.streamOfCategory().count());
+        assertEquals(0, recordTest.streamOfCategory().count());
+        assertEquals(1, recordCategory.streamOfCategory().count());
+        assertEquals(0, recordRecordId.streamOfCategory().count());
+        assertEquals(1, record.streamOfCategory().count());
+
+        assertEquals("ELSE", recordNull.streamOfCategory().findFirst().orElse("ELSE"));
+        assertEquals("ELSE", recordEmpty.streamOfCategory().findFirst().orElse("ELSE"));
+        assertEquals("ELSE", recordTest.streamOfCategory().findFirst().orElse("ELSE"));
+        assertEquals("category", recordCategory.streamOfCategory().findFirst().orElse("ELSE"));
+        assertEquals("ELSE", recordRecordId.streamOfCategory().findFirst().orElse("ELSE"));
+        assertEquals("category", record.streamOfCategory().findFirst().orElse("ELSE"));
+    }
+
+    @Test
     void getRecordId() {
         assertNull(recordNull.getRecordId());
         assertNull(recordEmpty.getRecordId());
@@ -139,6 +183,40 @@ class SingleRecordTest {
         assertNull(recordCategory.getRecordId());
         assertEquals(Long.valueOf(1L), recordRecordId.getRecordId());
         assertEquals(Long.valueOf(1L), record.getRecordId());
+    }
+
+    @Test
+    void getRecordIdAsOptional() {
+        assertEquals(Long.valueOf(Long.MAX_VALUE), recordNull.getRecordIdAsOptional().orElse(Long.valueOf(Long.MAX_VALUE)));
+        assertEquals(Long.valueOf(Long.MAX_VALUE), recordEmpty.getRecordIdAsOptional().orElse(Long.valueOf(Long.MAX_VALUE)));
+        assertEquals(Long.valueOf(Long.MAX_VALUE), recordTest.getRecordIdAsOptional().orElse(Long.valueOf(Long.MAX_VALUE)));
+        assertEquals(Long.valueOf(Long.MAX_VALUE), recordCategory.getRecordIdAsOptional().orElse(Long.valueOf(Long.MAX_VALUE)));
+        assertEquals(Long.valueOf(1L), recordRecordId.getRecordIdAsOptional().orElse(Long.valueOf(Long.MAX_VALUE)));
+        assertEquals(Long.valueOf(1L), record.getRecordIdAsOptional().orElse(Long.valueOf(Long.MAX_VALUE)));
+    }
+
+    @Test
+    void streamOfRecordId() {
+        assertNotNull(recordNull.streamOfRecordId());
+        assertNotNull(recordEmpty.streamOfRecordId());
+        assertNotNull(recordTest.streamOfRecordId());
+        assertNotNull(recordCategory.streamOfRecordId());
+        assertNotNull(recordRecordId.streamOfRecordId());
+        assertNotNull(record.streamOfRecordId());
+
+        assertEquals(0, recordNull.streamOfRecordId().count());
+        assertEquals(0, recordEmpty.streamOfRecordId().count());
+        assertEquals(0, recordTest.streamOfRecordId().count());
+        assertEquals(0, recordCategory.streamOfRecordId().count());
+        assertEquals(1, recordRecordId.streamOfRecordId().count());
+        assertEquals(1, record.streamOfRecordId().count());
+
+        assertEquals(Long.MAX_VALUE, recordNull.streamOfRecordId().findFirst().orElse(Long.MAX_VALUE));
+        assertEquals(Long.MAX_VALUE, recordEmpty.streamOfRecordId().findFirst().orElse(Long.MAX_VALUE));
+        assertEquals(Long.MAX_VALUE, recordTest.streamOfRecordId().findFirst().orElse(Long.MAX_VALUE));
+        assertEquals(Long.MAX_VALUE, recordCategory.streamOfRecordId().findFirst().orElse(Long.MAX_VALUE));
+        assertEquals(1L, recordRecordId.streamOfRecordId().findFirst().orElse(Long.MAX_VALUE));
+        assertEquals(1L, record.streamOfRecordId().findFirst().orElse(Long.MAX_VALUE));
     }
 
     @Test
